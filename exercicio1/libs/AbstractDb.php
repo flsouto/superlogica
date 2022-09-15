@@ -7,10 +7,15 @@ abstract class AbstractDb{
     protected $pdo;
 
     function __construct(){
-        $this->pdo = new PDO("sqlite:./exercicio1.db");
+        $this->pdo = new \PDO("sqlite:./exercicio1.db");
+        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
 
     abstract function getDDL() : string;
+
+    function createTable(){
+        $this->pdo->exec($this->getDDL());
+    }
 
     function validateFields($fields){
         $ddl = $this->getDDL();
@@ -23,15 +28,14 @@ abstract class AbstractDb{
 
     function insert(array $data){
         $this->validateFields(array_keys($data));
+        $cols = array_keys($data);
+        $holders = array_map(function($col){ return ':'.$col; },$cols);
+        $holders = implode(",", $holders);
         $cols = implode(",",$cols);
-        $holders = array_map($cols, function($col){ return ':'.$col; });
-        $holders = implode("?", $holders);
-        $stmt = $this->pdo->prepare("INSERT INTO $this->tableName ($cols) VALUES($holders)");
-        foreach($data as $k => $v){
-            $stmt->bindValue(':'.$k, $v);
-        }
-        $stmt->execute();
-        return $this->pdo->query("SELECT last_insert_rowid();")->fetch(PDO::FETCH_COLUMN);
+        $query = "INSERT INTO $this->tableName ($cols) VALUES($holders)";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute($data);
+        return $this->pdo->query("SELECT last_insert_rowid();")->fetch(\PDO::FETCH_COLUMN);
     }
 
     function select(array $fields, array $where = [], $sortBy='id',$sortOrder='DESC', $limit = 100){
@@ -46,7 +50,9 @@ abstract class AbstractDb{
         foreach($where as $k => $v){
             $where_and[] = "$k = :$k";
         }
-        $query.= " WHERE ".implode(" AND ", $where_and);
+        if(!empty($where_and)){
+            $query.= " WHERE ".implode(" AND ", $where_and);
+        }
         $query.= " ORDER BY $sortBy $sortOrder";
         $query.= " LIMIT :limit";
         $stmt = $this->pdo->prepare($query);
@@ -54,8 +60,9 @@ abstract class AbstractDb{
             $stmt->bindValue(":$k", $v);
         }
         $stmt->bindValue(":limit", $limit);
+        $stmt->execute();
         $rows = [];
-        while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+        while($row = $stmt->fetch(\PDO::FETCH_ASSOC)){
             $rows[] = $row;
         }
         return $rows;
