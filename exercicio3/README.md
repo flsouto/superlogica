@@ -7,7 +7,7 @@ Para a concatenação eu usei o operador `||` que é o mesmo usado no posgresql.
 Se fosse Mysql deveríamos usar a função `CONCAT`.
 
 ## Critério para listagem
-Utilizei o critério `id IN (1,2,4)` para selecionar apenas aqueles personagens.
+Utilizei o critério `id IN (1,4,6)` para selecionar apenas aqueles personagens.
 Mas poderia ter usado `nome LIKE '%r'` pois todos terminam com "r", veja:
 
 - Peter Parke**r**

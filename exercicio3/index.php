@@ -44,7 +44,7 @@ $st = $pdo->prepare("
         CASE WHEN strftime('%Y') - i.ano_nascimento > 50 THEN 'SIM' ELSE 'NÃO' END as maior_50_anos
         FROM usuario u
         JOIN info i ON i.id = u.id
-        WHERE u.id IN (1,2,4) -- o crietério também poderia ser u.nome LIKE '%r' pois todos terminam com r :P
+        WHERE u.id IN (1,4,6) -- o crietério também poderia ser u.nome LIKE '%r' pois todos terminam com r :P
         ORDER BY u.cpf
 ");
 
