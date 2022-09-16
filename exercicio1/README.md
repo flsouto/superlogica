@@ -26,7 +26,7 @@ mini-framework utilizando meus conhecimentos de muitos anos.
 
 A seguir, então, eu vou descrever cada componente desse "mini-framework":
 
-### autoload
+### Autoload
 Para os exemplos abaixo funcionarem é necessário incluir o `autoload.php` que
 já se encarrega de encontrar as classes "automagicamente" ;)
 
