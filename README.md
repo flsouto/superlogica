@@ -1,4 +1,4 @@
-# Hello SuperLógica :)
+# Hello Superlógica :)
 Cada exercício está resolvido em sua respectiva pasta aqui no github.
 Cada pastinha também possui um README.md com um parecer sobre como resolvi tal questão.
 
