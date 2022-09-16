@@ -34,7 +34,7 @@ class UsersDb extends AbstractDb
         }
 
         // Delega inserção para a classe pai
-        parent::insert($data);
+        return parent::insert($data);
 
     }
 

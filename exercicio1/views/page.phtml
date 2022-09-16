@@ -2,8 +2,21 @@
     <head>
         <title><?php echo $title ?? 'Exercício1 SuperLógica'; ?></title>
         <meta charset="UTF-8" />
+        <style>
+            #main{
+                background:white;
+                border:1px solid silver;
+                padding:10px;
+                min-height:400px;
+            }
+            body{
+                background:#efefef;
+            }
+        </style>
     </head>
     <body>
+        <div id="main">
         <?php echo $content ?? 'Nenhum conteúdo definido!'; ?>
+        </div>
     </body>
 </html>

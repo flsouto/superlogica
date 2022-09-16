@@ -13,8 +13,12 @@ abstract class AbstractDb{
 
     abstract function getDDL() : string;
 
-    function createTable(){
-        $this->pdo->exec($this->getDDL());
+    function createTableOnce(){
+        $ddl = $this->getDDL();
+        if(!stristr($ddl,'IF NOT EXISTS')){
+            $ddl = str_replace('TABLE '.$this->tableName,'TABLE IF NOT EXISTS '.$this->tableName,$ddl);
+        }
+        $this->pdo->exec($ddl);
     }
 
     function validateFields($fields){

@@ -1,3 +1,26 @@
+<style>
+    label{
+        width:200px;
+        display:inline-block;
+        background:#efefef;
+        padding:5px;
+    }
+    input{
+        padding:5px;
+    }
+    .error{
+        background:red;
+        color:yellow;
+        width:400px;
+        padding:10px;
+        margin-bottom:5px;
+    }
+</style>
+<?php if(!empty($error)) : ?>
+<div class="error">
+    <?php echo $error; ?>
+</div>
+<?php endif; ?>
 <form method="post">
     <div>
         <label for="name">Nome completo:</label>
