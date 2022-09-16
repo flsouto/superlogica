@@ -70,8 +70,8 @@ abstract class AbstractTable{
      */
     function insert(array $data): int
     {
-        $this->validateFields(array_keys($data));
         $cols = array_keys($data);
+        $this->validateFields($cols);
         $holders = array_map(function($col){ return ':'.$col; },$cols);
         $holders = implode(",", $holders);
         $cols = implode(",",$cols);
