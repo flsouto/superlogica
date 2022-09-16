@@ -1,9 +1,22 @@
 <?php
-namespace Exercicio1;
+namespace Exercicio1\Database;
 
-abstract class AbstractDb{
+/**
+ * Classe que deve ser herdada por todas as tabelas concretas
+ * Já provê uma funcionalidade básica para as classes filhas
+ * Uma classe concreta só precisa definir tableName e getDDL
+ */
+abstract class AbstractTable{
 
+    /**
+     * @var string $tableName Deve ser sobrescrita por uma tabela concreta
+     */
     protected $tableName;
+
+    /**
+     * @var \PDO $pdo instancia do PDO
+     * @todo criar um singleton para evitar ficar criando varias instancias da conexao
+     */
     protected $pdo;
 
     function __construct(){
@@ -11,8 +24,18 @@ abstract class AbstractDb{
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
 
+    /**
+     * A classe concreta deve implementar esse método
+     * retornando um CREATE TABLE xxx
+     * @return string
+     */
     abstract function getDDL() : string;
 
+    /**
+     * Cria a tabela apenas se ainda não existir
+     * utilizando o próprio método DDL definido pela classe concreta
+     * @return void
+     */
     function createTableOnce(){
         $ddl = $this->getDDL();
         if(!stristr($ddl,'IF NOT EXISTS')){
@@ -21,6 +44,14 @@ abstract class AbstractDb{
         $this->pdo->exec($ddl);
     }
 
+    /**
+     * Este método serve para validar se
+     * os campos realmente pertencem a essa tabela
+     * utiliza o próprio DDL para tal
+     *
+     * @param $fields
+     * @return void
+     */
     function validateFields($fields){
         $ddl = $this->getDDL();
         foreach($fields as $f){
@@ -30,7 +61,15 @@ abstract class AbstractDb{
         }
     }
 
-    function insert(array $data){
+    /**
+     * Insere um registro na tabela
+     * Valida os campos e utiliza prepared statements para ficar seguro
+     *
+     * @param array $data
+     * @return int
+     */
+    function insert(array $data): int
+    {
         $this->validateFields(array_keys($data));
         $cols = array_keys($data);
         $holders = array_map(function($col){ return ':'.$col; },$cols);
@@ -42,6 +81,18 @@ abstract class AbstractDb{
         return $this->pdo->query("SELECT last_insert_rowid();")->fetch(\PDO::FETCH_COLUMN);
     }
 
+    /**
+     * Permite selecionar colunas específicas dessa tabela
+     * Além de permitir filtros, ordenação e limit
+     * Utiliza validação dos campos e prepared statements para segurança
+     *
+     * @param array $fields
+     * @param array $where
+     * @param $sortBy
+     * @param $sortOrder
+     * @param $limit
+     * @return array
+     */
     function select(array $fields, array $where = [], $sortBy='id',$sortOrder='DESC', $limit = 100){
         $all_fields = array_merge($fields, array_keys($where), [$sortBy]);
         $this->validateFields($all_fields);
@@ -72,6 +123,14 @@ abstract class AbstractDb{
         return $rows;
     }
 
+    /**
+     * Reutiliza select acima para verificar se um registro existe, por determinado critério
+     * Exemplo: $this->exists('email','fabiolimasouto@gmail.com');
+     *
+     * @param $field
+     * @param $value
+     * @return bool
+     */
     function exists($field, $value){
         $result = $this->select(["id"],[$field=>$value],'id','DESC',1);
         return count($result) > 0;

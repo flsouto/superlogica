@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 require(__DIR__."/autoload.php");
 
 // Instancia alguns objetos
-$db = new Exercicio1\UsersDb();
+$db = new \Exercicio1\Database\Users();
 $page = new Exercicio1\View('page');
 $form = new Exercicio1\View('form');
 

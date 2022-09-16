@@ -1,7 +1,7 @@
 <?php
-namespace Exercicio1;
+namespace Exercicio1\Database;
 
-use Exercicio1\Validators\Alpha;
+use Exercicio1\Validation;
 use Exercicio1\Validators\CEP;
 use Exercicio1\Validators\Email;
 use Exercicio1\Validators\MinWords;
@@ -9,11 +9,20 @@ use Exercicio1\Validators\MinLength;
 use Exercicio1\Validators\Regex;
 use Exercicio1\Validators\Unique;
 
-class UsersDb extends AbstractDb
+class Users extends AbstractTable
 {
+    /**
+     * @var string $tableName Define o nome da tabela
+     */
     protected $tableName = 'users';
 
-    function insert(array $data){
+    /**
+     * Valida os dados de usuário antes de inserir
+     * @param array $data
+     * @return int
+     * @throws \Exception
+     */
+    function insert(array $data) : int{
 
         $v = new Validation();
 
@@ -38,6 +47,10 @@ class UsersDb extends AbstractDb
 
     }
 
+    /**
+     * Define o DDL dessa tabela
+     * @return string
+     */
     function getDDL() : string{
         return "
             CREATE TABLE users(
