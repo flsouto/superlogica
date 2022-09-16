@@ -1,9 +1,31 @@
 <?php
+namespace Exercicio1;
+use Exercicio1\Validators\AbstractValidator;
 
-$validation->add('nome', new Validators\Required());
-$validation->add('email', new Validators\Unique('fieldname'));
-$validation->add('');
+class Validation{
 
-if($error = $validation->check($_POST)){
+    protected $validators = [];
+    protected $error = '';
 
+    function add($field, AbstractValidator $rule, $message){
+        $this->validators[] = [
+            'field' => $field,
+            'rule' => $rule,
+            'message' => $message
+        ];
+        return $this;
+    }
+    function validate(array $data){
+        foreach($this->validators as $v){
+            $value = $data[$v['field']] ?? null;
+            if(!$v['rule']->validate($value)){
+                $this->error = $v['message'];
+                return false;
+            }
+        }
+        return true;
+    }
+    function error(){
+        return $this->error;
+    }
 }

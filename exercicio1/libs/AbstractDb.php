@@ -21,7 +21,7 @@ abstract class AbstractDb{
         $ddl = $this->getDDL();
         foreach($fields as $f){
             if(!strstr($ddl, $f)){
-                throw new InvalidArgumentException("Atributo inválido: $f");
+                throw new \InvalidArgumentException("Atributo inválido: $f");
             }
         }
     }

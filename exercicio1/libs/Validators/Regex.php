@@ -1,7 +1,7 @@
 <?php
 namespace Exercicio1\Validators;
 
-class MinWords extends AbstractValidator {
+class Regex extends AbstractValidator {
 
     private $regex;
 

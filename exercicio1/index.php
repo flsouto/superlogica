@@ -1,6 +1,20 @@
 <?php
+error_reporting(E_ALL);
+
 // Inclui autoloader para não precisar incluir as classes manualmente
 require(__DIR__."/autoload.php");
+$users = new Exercicio1\UsersDb();
+//$users->createTable();
+$id = $users->insert([
+    'name' => 'Fernandão da Silva',
+    'userName' => 'blanka',
+    'zipCode' => '95590-000',
+    'email' => 'fabiolimasouto@gmail.com',
+    'password' => '12345678F'
+]);
+echo $id;
+print_r($users->select(['name']));
+die();
 
 // Instancia alguns objetos
 $db = new Exercicio1\UsersDb();
