@@ -26,9 +26,19 @@ mini-framework utilizando meus conhecimentos de muitos anos.
 
 A seguir, então, eu vou descrever cada componente desse "mini-framework":
 
+### autoload
+Para os exemplos abaixo funcionarem é necessário incluir o `autoload.php` que
+já se encarrega de encontrar as classes "automagicamente" ;)
+
+Aliás, nunca vi outra linguagem de programação com essa mesma feature, acho
+que só o PHP que possui isso, mas posso estar engando...
+
 ### Database
 Escolhi utilizar sqlite pois é um tipo de banco que cai bem para
-projetos simples como este. Para definir uma tabela dentro do meu
+projetos simples como este. Para projetos maiores, obviamente eu escolheria
+mysql ou posgresql, com os quais eu sei trabalhar muito bem.
+
+Para definir uma tabela dentro do meu
 mini-framework, basta estender `AbstractTable` e implementar o método
 `getDDL` além da variável `tableName`.
 
@@ -45,7 +55,8 @@ $rows = $users->select($fields=['email'],$where=['username'=>'flsouto']);
 ```
 
 Para os detalhes de como implementei toda essa magia, pode olhar o
-conteúdo da classe `AbstractTable` que está tudo bem documentado
+conteúdo das classes `AbstractTable` e `Users` (dentro de `libs/database/`).
+Lá você vai ter cada variável e método das classes bem documentados.
 
 ## Validation
 Primeiro eu pensei em colocar um monte de IFs e Elses no insert
@@ -66,7 +77,7 @@ if(!$val->validate($dados)){
 }
 ```
 
-Perceba que no exemplo acima eu consegui atingi os seguintes objetos:
+Perceba que no exemplo acima eu consegui atingi os seguintes objetivos:
 
 - Criar validadores complexos, que trabalham com banco de dados
 - Aplicar diferentes regras para o mesmo campo
@@ -87,12 +98,12 @@ $view->set("campo","valor");
 echo $view;
 ```
 
-Claro, estou assumindo que você incluiu o meu `autoload.php` que
-já se encarrega de encontrar as classes "automagicamente" ;)
-
 Como as views são objetos que implementam __toString, 
 é possível compor Views como no exemplo abaixo:
 ```php 
 $page = new Exercicio1\View('page');
 $page->set('content', $form);
+echo $page;
 ```
+
+É isso pessoal! Obrigado pela leitura :)
