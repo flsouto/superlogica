@@ -43,7 +43,7 @@ mini-framework, basta estender `AbstractTable` e implementar o método
 `getDDL` além da variável `tableName`.
 
 Após feito isso, é só alegria:
-```
+```php
 $users = new Exercicio1\Database\Users();
 $insert_id = $users->insert([
     'name' => 'Fábio Souto',
